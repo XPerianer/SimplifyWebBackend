@@ -4,13 +4,16 @@ import asyncio
 import websockets
 import json
 
+from extractive_summarization import summarize
+
 
 async def adjustText(websocket, path):
-    jsonObject = await websocket.recv()
-    text_array = json.loads(jsonObject)
-    print(f"< {text_array}")
+    json_object = await websocket.recv()
+    req = json.loads(json_object)
+    print(f"Req: {req}")
+    text_array = req["text"]
 
-    modified_text = [text.upper() for text in text_array]
+    modified_text = [summarize(text, req["options"]["shortness"] / 100) for text in text_array]
 
     await websocket.send(json.dumps(modified_text))
     print(f"> {modified_text}")
