@@ -15,6 +15,14 @@ Installing dependencies:
 pip install -r requirements.txt
 ```
 
+You also need to download some special nltk library data one time.
+This can be done using
+```
+python3
+	import nltk
+	nltk.download('punkt')
+```
+
 # Run
 ```
 python3 -m app
