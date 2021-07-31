@@ -13,7 +13,7 @@ async def adjustText(websocket, path):
     print(f"Req: {req}")
     text_array = req["text"]
 
-    modified_text = [summarize(text, req["options"]["shortness"] / 100) for text in text_array]
+    modified_text = [summarize(text,  (1 - req["options"]["shortness"]) / 100) for text in text_array]
 
     await websocket.send(json.dumps(modified_text))
     print(f"> {modified_text}")
