@@ -10,13 +10,21 @@ from extractive_summarization import summarize
 async def adjustText(websocket, path):
     json_object = await websocket.recv()
     req = json.loads(json_object)
-    print(f"Req: {req}")
+    #print(f"Req: {req}")
     text_array = req["text"]
+    print(req["options"])
 
-    modified_text = [summarize(text,  (1 - req["options"]["shortness"]) / 100) for text in text_array]
+    print(f"\n\nsummarizing {len(text_array)} paragraphs")
+    modified_text = []
+    for text in text_array:
+        score = req["options"]["shortness"] / 100
+        summary_text = summarize(text,  score)
+        modified_text.append(summary_text)
+        print(f">> ratio {len(summary_text) / len(text)}\t score {score}")
+
 
     await websocket.send(json.dumps(modified_text))
-    print(f"> {modified_text}")
+    # print(f"> {modified_text}")
 
 
 start_server = websockets.serve(adjustText, "localhost", 8080)
