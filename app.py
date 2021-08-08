@@ -20,7 +20,7 @@ async def adjustText(websocket, path):
         score = req["options"]["shortness"] / 100
         summary_text = summarize(text,  score)
         modified_text.append(summary_text)
-        print(f">> ratio {len(summary_text) / len(text)}\t score {score}")
+        print(f">> ratio {len(summary_text) / (0.01 + len(text))}\t score {score}")
 
 
     await websocket.send(json.dumps(modified_text))
