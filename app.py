@@ -4,19 +4,23 @@ import asyncio
 import websockets
 import json
 
-from extractive_summarization import summarize
+from extractive_summarization import summarize as extractive_summarize
+
+from bart_summarization import summarize as bart_summarize
 
 
 async def adjustText(websocket, path):
     json_object = await websocket.recv()
     req = json.loads(json_object)
-    print(f"Req: {req}")
+    print("Got request")
+    #print(f"Req: {req}")
     text_array = req["text"]
 
-    modified_text = [summarize(text,  (1 - req["options"]["shortness"]) / 100) for text in text_array]
+    modified_text = [bart_summarize(text,  (100 - req["options"]["shortness"]) / 100) for text in text_array]
 
     await websocket.send(json.dumps(modified_text))
-    print(f"> {modified_text}")
+    print("Sending answer")
+    # print(f"> {modified_text}")
 
 
 start_server = websockets.serve(adjustText, "localhost", 8080)

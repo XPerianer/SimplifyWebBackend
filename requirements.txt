@@ -2,3 +2,7 @@ websockets
 sumy
 nltk
 numpy
+torch
+torchvision
+torchaudio
+transformers
